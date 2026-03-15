@@ -9,8 +9,8 @@ interface ListingCardProps {
 export default function ListingCard({ listing }: ListingCardProps) {
   const heroImage = listing.metadata?.hero_image
   const location = listing.metadata?.location ?? ''
-  const pricePerNight = listing.metadata?.price_per_night ?? 0
-  const rating = listing.metadata?.rating ?? 0
+  const pricePerNight = Number(listing.metadata?.price_per_night) || 0 // Changed: Coerce to number
+  const rating = Number(listing.metadata?.rating) || 0 // Changed: Coerce to number
   const isGuestFavorite = getMetafieldBoolean(listing.metadata?.guest_favorite)
 
   return (

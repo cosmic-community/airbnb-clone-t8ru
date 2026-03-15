@@ -13,6 +13,11 @@ export default function BookingCard({ pricePerNight, rating, reviewCount }: Book
   const [checkOut, setCheckOut] = useState('')
   const [guests, setGuests] = useState(1)
 
+  // Changed: Ensure props are actual numbers to prevent .toFixed crash
+  const safeRating = Number(rating) || 0
+  const safePricePerNight = Number(pricePerNight) || 0
+  const safeReviewCount = Number(reviewCount) || 0
+
   // Calculate nights
   let nights = 2 // default display
   if (checkIn && checkOut) {
@@ -20,7 +25,7 @@ export default function BookingCard({ pricePerNight, rating, reviewCount }: Book
     nights = Math.max(1, Math.ceil(diffMs / (1000 * 60 * 60 * 24)))
   }
 
-  const subtotal = pricePerNight * nights
+  const subtotal = safePricePerNight * nights
   const serviceFee = Math.round(subtotal * 0.14)
   const total = subtotal + serviceFee
 
@@ -30,17 +35,17 @@ export default function BookingCard({ pricePerNight, rating, reviewCount }: Book
       <div className="flex items-baseline justify-between mb-6">
         <div>
           <span className="text-2xl font-semibold text-airbnb-text">
-            ${pricePerNight}
+            ${safePricePerNight}
           </span>
           <span className="text-airbnb-gray"> night</span>
         </div>
-        {rating > 0 && (
+        {safeRating > 0 && (
           <div className="flex items-center gap-1 text-sm">
             <svg className="w-3.5 h-3.5 text-airbnb-text" fill="currentColor" viewBox="0 0 20 20">
               <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
             </svg>
-            <span className="font-semibold">{rating.toFixed(1)}</span>
-            <span className="text-airbnb-gray">· {reviewCount} review{reviewCount !== 1 ? 's' : ''}</span>
+            <span className="font-semibold">{safeRating.toFixed(1)}</span>
+            <span className="text-airbnb-gray">· {safeReviewCount} review{safeReviewCount !== 1 ? 's' : ''}</span>
           </div>
         )}
       </div>
@@ -101,11 +106,11 @@ export default function BookingCard({ pricePerNight, rating, reviewCount }: Book
       </p>
 
       {/* Price Breakdown */}
-      {pricePerNight > 0 && (
+      {safePricePerNight > 0 && (
         <div className="mt-5 space-y-3 text-sm">
           <div className="flex justify-between">
             <span className="underline text-airbnb-text">
-              ${pricePerNight} × {nights} night{nights !== 1 ? 's' : ''}
+              ${safePricePerNight} × {nights} night{nights !== 1 ? 's' : ''}
             </span>
             <span className="text-airbnb-text">${subtotal}</span>
           </div>

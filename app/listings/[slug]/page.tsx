@@ -25,14 +25,14 @@ export default async function ListingPage({
 
   const location = listing.metadata?.location ?? ''
   const description = listing.metadata?.description ?? ''
-  const pricePerNight = listing.metadata?.price_per_night ?? 0
-  const maxGuests = listing.metadata?.max_guests ?? 0
-  const bedrooms = listing.metadata?.bedrooms ?? 0
-  const beds = listing.metadata?.beds ?? 0
-  const bathrooms = listing.metadata?.bathrooms ?? 0
+  const pricePerNight = Number(listing.metadata?.price_per_night) || 0 // Changed: Coerce to number
+  const maxGuests = Number(listing.metadata?.max_guests) || 0 // Changed: Coerce to number
+  const bedrooms = Number(listing.metadata?.bedrooms) || 0 // Changed: Coerce to number
+  const beds = Number(listing.metadata?.beds) || 0 // Changed: Coerce to number
+  const bathrooms = Number(listing.metadata?.bathrooms) || 0 // Changed: Coerce to number
   const amenitiesStr = listing.metadata?.amenities ?? ''
-  const rating = listing.metadata?.rating ?? 0
-  const reviewCount = listing.metadata?.review_count ?? 0
+  const rating = Number(listing.metadata?.rating) || 0 // Changed: Coerce to number
+  const reviewCount = Number(listing.metadata?.review_count) || 0 // Changed: Coerce to number
   const isGuestFavorite = getMetafieldBoolean(listing.metadata?.guest_favorite)
   const propertyType = getMetafieldValue(listing.metadata?.property_type)
   const host = listing.metadata?.host
@@ -55,7 +55,7 @@ export default async function ListingPage({
 
   // Calculate average review rating from reviews
   const avgRating = reviews.length > 0
-    ? reviews.reduce((sum, r) => sum + (r.metadata?.rating ?? 0), 0) / reviews.length
+    ? reviews.reduce((sum, r) => sum + (Number(r.metadata?.rating) || 0), 0) / reviews.length // Changed: Coerce review rating to number
     : rating
 
   return (
