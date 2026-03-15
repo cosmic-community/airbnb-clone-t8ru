@@ -8,6 +8,7 @@ import ReviewCard from '@/components/ReviewCard'
 import HostCard from '@/components/HostCard'
 import BookingCard from '@/components/BookingCard'
 import Link from 'next/link'
+import ReactMarkdown from 'react-markdown'
 
 export default async function ListingPage({
   params
@@ -126,10 +127,10 @@ export default async function ListingPage({
             </div>
           )}
 
-          {/* Description */}
+          {/* Description - Changed: Use ReactMarkdown for rich text rendering */}
           <div className="py-6 border-b border-airbnb-border">
-            <div className="text-airbnb-text leading-relaxed whitespace-pre-line">
-              {description}
+            <div className="text-airbnb-text leading-relaxed prose prose-neutral max-w-none prose-headings:text-airbnb-text prose-p:text-airbnb-text prose-a:text-airbnb prose-strong:text-airbnb-text">
+              <ReactMarkdown>{description}</ReactMarkdown>
             </div>
           </div>
 

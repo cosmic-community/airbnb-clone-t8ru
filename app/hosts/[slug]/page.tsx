@@ -5,6 +5,7 @@ import { getMetafieldBoolean } from '@/types'
 import ListingCard from '@/components/ListingCard'
 import ReviewCard from '@/components/ReviewCard'
 import Link from 'next/link'
+import ReactMarkdown from 'react-markdown'
 
 export default async function HostPage({
   params
@@ -111,10 +112,12 @@ export default async function HostPage({
             )}
           </div>
 
-          {/* Bio */}
+          {/* Bio - Changed: Use ReactMarkdown for rich text rendering */}
           {bio && (
             <div className="mt-4">
-              <p className="text-airbnb-text leading-relaxed whitespace-pre-line">{bio}</p>
+              <div className="text-airbnb-text leading-relaxed prose prose-neutral max-w-none prose-headings:text-airbnb-text prose-p:text-airbnb-text prose-a:text-airbnb prose-strong:text-airbnb-text">
+                <ReactMarkdown>{bio}</ReactMarkdown>
+              </div>
             </div>
           )}
         </div>
