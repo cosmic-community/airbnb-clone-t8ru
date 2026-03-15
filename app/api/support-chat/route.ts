@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const AGENT_ENDPOINT =
-  'https://9e42-2601-644-8403-4910-392a-9efc-1678-cf8c.ngrok-free.app/v3/ai/agents/69b6eb1fd724d895912ac0d8/messages?slug=airbnb-clone-production-34aa8320-2092-11f1-8afd-056869ae5cc3'
-
 interface AgentResponse {
   message?: string
   content?: string
@@ -16,10 +13,15 @@ interface AgentResponse {
 export async function POST(request: NextRequest) {
   try {
     const token = process.env.COSMIC_AGENT_TOKEN
+    const agentEndpoint = process.env.COSMIC_AGENT_ENDPOINT
 
-    if (!token) {
+    if (!token || !agentEndpoint) {
+      console.error('Support chat misconfigured:', {
+        hasToken: !!token,
+        hasEndpoint: !!agentEndpoint,
+      })
       return NextResponse.json(
-        { message: 'Support chat is not configured.' },
+        { message: 'Support chat is not configured. Please set COSMIC_AGENT_TOKEN and COSMIC_AGENT_ENDPOINT environment variables.' },
         { status: 503 }
       )
     }
@@ -34,7 +36,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const agentRes = await fetch(AGENT_ENDPOINT, {
+    const agentRes = await fetch(agentEndpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -46,6 +48,15 @@ export async function POST(request: NextRequest) {
     if (!agentRes.ok) {
       const errorText = await agentRes.text()
       console.error('Agent API error:', agentRes.status, errorText)
+
+      // Provide a more specific message for auth errors
+      if (agentRes.status === 401 || agentRes.status === 403) {
+        return NextResponse.json(
+          { message: 'Support agent authentication failed. Please verify your COSMIC_AGENT_TOKEN is correct and the COSMIC_AGENT_ENDPOINT is up to date.' },
+          { status: 502 }
+        )
+      }
+
       return NextResponse.json(
         { message: 'Sorry, the support agent is unavailable right now. Please try again later.' },
         { status: 502 }
