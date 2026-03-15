@@ -89,10 +89,11 @@ export default function SupportChat() {
 
   return (
     <>
-      {/* Chat Toggle Button */}
+      {/* Chat Toggle Button - Changed: increased z-index to z-[9999] to ensure visibility above all other elements */}
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        className="fixed bottom-5 left-5 z-50 w-14 h-14 rounded-full bg-airbnb-red text-white shadow-lg hover:bg-[#d70466] transition-all duration-200 flex items-center justify-center"
+        className="fixed bottom-5 left-5 w-14 h-14 rounded-full bg-airbnb-red text-white shadow-lg hover:bg-[#d70466] transition-all duration-200 flex items-center justify-center"
+        style={{ zIndex: 9999 }}
         aria-label={isOpen ? 'Close support chat' : 'Open support chat'}
       >
         {isOpen ? (
@@ -107,11 +108,21 @@ export default function SupportChat() {
         )}
       </button>
 
-      {/* Chat Panel */}
+      {/* Chat Panel - Changed: increased z-index to z-[9999], used explicit display:flex and flex-direction to ensure layout */}
       {isOpen && (
-        <div className="fixed bottom-24 left-5 z-50 w-[360px] max-w-[calc(100vw-40px)] h-[500px] max-h-[calc(100vh-120px)] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden">
-          {/* Header */}
-          <div className="bg-airbnb-red px-5 py-4 flex items-center gap-3 flex-shrink-0">
+        <div
+          className="fixed bottom-24 left-5 w-[360px] max-w-[calc(100vw-40px)] bg-white rounded-2xl shadow-2xl border border-gray-200"
+          style={{
+            zIndex: 9999,
+            height: '500px',
+            maxHeight: 'calc(100vh - 120px)',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden',
+          }}
+        >
+          {/* Header - Changed: added min-h to prevent header from collapsing */}
+          <div className="bg-airbnb-red px-5 py-4 flex items-center gap-3" style={{ flexShrink: 0, minHeight: '60px' }}>
             <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
@@ -123,8 +134,11 @@ export default function SupportChat() {
             </div>
           </div>
 
-          {/* Messages */}
-          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-gray-50">
+          {/* Messages - Changed: explicit flex:1 and minHeight:0 to allow proper scrolling within flex container */}
+          <div
+            className="overflow-y-auto px-4 py-4 space-y-3 bg-gray-50"
+            style={{ flex: '1 1 0%', minHeight: 0 }}
+          >
             {messages.length === 0 && (
               <div className="flex flex-col items-center justify-center h-full text-center px-4">
                 <div className="w-12 h-12 rounded-full bg-airbnb-red/10 flex items-center justify-center mb-3">
@@ -177,8 +191,8 @@ export default function SupportChat() {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input */}
-          <div className="px-4 py-3 border-t border-gray-200 bg-white flex-shrink-0">
+          {/* Input - Changed: added explicit flexShrink:0 and minHeight to prevent input area from being hidden */}
+          <div className="px-4 py-3 border-t border-gray-200 bg-white" style={{ flexShrink: 0, minHeight: '60px' }}>
             <div className="flex items-end gap-2">
               <textarea
                 ref={inputRef}
