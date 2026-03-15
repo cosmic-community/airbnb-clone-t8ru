@@ -25,14 +25,16 @@ export default async function ListingPage({
 
   const location = listing.metadata?.location ?? ''
   const description = listing.metadata?.description ?? ''
-  const pricePerNight = Number(listing.metadata?.price_per_night) || 0 // Changed: Coerce to number
-  const maxGuests = Number(listing.metadata?.max_guests) || 0 // Changed: Coerce to number
-  const bedrooms = Number(listing.metadata?.bedrooms) || 0 // Changed: Coerce to number
-  const beds = Number(listing.metadata?.beds) || 0 // Changed: Coerce to number
-  const bathrooms = Number(listing.metadata?.bathrooms) || 0 // Changed: Coerce to number
-  const amenitiesStr = listing.metadata?.amenities ?? ''
-  const rating = Number(listing.metadata?.rating) || 0 // Changed: Coerce to number
-  const reviewCount = Number(listing.metadata?.review_count) || 0 // Changed: Coerce to number
+  const pricePerNight = Number(listing.metadata?.price_per_night) || 0
+  const maxGuests = Number(listing.metadata?.max_guests) || 0
+  const bedrooms = Number(listing.metadata?.bedrooms) || 0
+  const beds = Number(listing.metadata?.beds) || 0
+  const bathrooms = Number(listing.metadata?.bathrooms) || 0
+  // Changed: Safely coerce amenities to string using getMetafieldValue to prevent v.split is not a function error
+  const amenitiesRaw = listing.metadata?.amenities
+  const amenitiesStr = typeof amenitiesRaw === 'string' ? amenitiesRaw : getMetafieldValue(amenitiesRaw)
+  const rating = Number(listing.metadata?.rating) || 0
+  const reviewCount = Number(listing.metadata?.review_count) || 0
   const isGuestFavorite = getMetafieldBoolean(listing.metadata?.guest_favorite)
   const propertyType = getMetafieldValue(listing.metadata?.property_type)
   const host = listing.metadata?.host
@@ -48,14 +50,14 @@ export default async function ListingPage({
     })
   }
 
-  // Parse amenities
+  // Changed: Parse amenities safely - amenitiesStr is guaranteed to be a string now
   const amenities = amenitiesStr
     ? amenitiesStr.split(',').map((a) => a.trim()).filter(Boolean)
     : []
 
   // Calculate average review rating from reviews
   const avgRating = reviews.length > 0
-    ? reviews.reduce((sum, r) => sum + (Number(r.metadata?.rating) || 0), 0) / reviews.length // Changed: Coerce review rating to number
+    ? reviews.reduce((sum, r) => sum + (Number(r.metadata?.rating) || 0), 0) / reviews.length
     : rating
 
   return (
