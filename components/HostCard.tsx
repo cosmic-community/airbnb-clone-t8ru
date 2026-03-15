@@ -10,7 +10,7 @@ export default function HostCard({ host }: HostCardProps) {
   const hostName = host.metadata?.name || host.title
   const profilePhoto = host.metadata?.profile_photo
   const isSuperhost = getMetafieldBoolean(host.metadata?.superhost)
-  const yearsHosting = host.metadata?.years_hosting ?? 0
+  const yearsHosting = Number(host.metadata?.years_hosting) || 0 // Changed: Coerce to number
 
   return (
     <Link href={`/hosts/${host.slug}`} className="flex items-center gap-4 group">

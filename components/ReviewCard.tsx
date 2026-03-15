@@ -6,7 +6,7 @@ interface ReviewCardProps {
 
 export default function ReviewCard({ review }: ReviewCardProps) {
   const reviewerName = review.metadata?.reviewer_name ?? 'Anonymous'
-  const rating = review.metadata?.rating ?? 5
+  const rating = Number(review.metadata?.rating) || 5 // Changed: Coerce to number
   const reviewDate = review.metadata?.review_date ?? ''
   const reviewText = review.metadata?.review_text ?? ''
 

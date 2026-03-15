@@ -33,7 +33,7 @@ export default async function HostPage({
   const bio = host.metadata?.bio || ''
   const profilePhoto = host.metadata?.profile_photo
   const isSuperhost = getMetafieldBoolean(host.metadata?.superhost)
-  const yearsHosting = host.metadata?.years_hosting ?? 0
+  const yearsHosting = Number(host.metadata?.years_hosting) || 0 // Changed: Coerce to number
   const responseRate = host.metadata?.response_rate ?? ''
   const responseTime = host.metadata?.response_time ?? ''
   const school = host.metadata?.school ?? ''
@@ -83,7 +83,7 @@ export default async function HostPage({
           {/* Stats Grid */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
             <div className="p-4 bg-gray-50 rounded-xl text-center">
-              <p className="text-2xl font-bold text-airbnb-text">{allReviews.length}</p>
+              <p className="text-2xl font-bold text-airbnb-text">{hostReviews.length}</p>
               <p className="text-sm text-airbnb-gray">Reviews</p>
             </div>
             <div className="p-4 bg-gray-50 rounded-xl text-center">
