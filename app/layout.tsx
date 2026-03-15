@@ -3,6 +3,7 @@ import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import CosmicBadge from '@/components/CosmicBadge'
+import SupportChat from '@/components/SupportChat'
 
 export const metadata: Metadata = {
   title: 'StayBnB | Vacation Rentals, Cabins, Beach Houses & Unique Homes',
@@ -37,6 +38,7 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
+        <SupportChat />
         <CosmicBadge bucketSlug={bucketSlug} />
       </body>
     </html>
